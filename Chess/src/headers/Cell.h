@@ -21,7 +21,7 @@ public:
 	int m_width = 0;
 	int m_height = 0;
 
-	Piece piece = Piece(m_width, m_height);
+	Piece piece = Piece();
 	sf::Color m_color = sf::Color(0, 0, 0);
 
 };

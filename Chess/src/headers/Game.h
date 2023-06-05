@@ -22,6 +22,7 @@ private:
 	void KeyRelease();
 	void update();
 	void render();
+	void inipiece(int x, int y, E_Piece state);
 
 private:
 	const int m_width;

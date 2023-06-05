@@ -6,13 +6,7 @@
 //my includes
 #include "headers/Piece.h"
 
-Piece::Piece(int width, int height) {
-	spritewidht = width;
-	spriteheight = height;
-}
-
-Piece::Piece(E_Piece piece) {
-	m_state = piece;
+Piece::Piece() {
 }
 
 Piece::~Piece() {
@@ -34,4 +28,8 @@ void Piece::setTexture(sf::Texture* texture, int x, int y) {
 
 void Piece::draw(sf::RenderWindow* windowptr) {
 	windowptr->draw(*sprite);
+}
+
+void Piece::setSpriteScale(float scalex, float scaley) {
+	sprite->setScale(scalex, scaley);
 }

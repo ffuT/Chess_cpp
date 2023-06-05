@@ -35,22 +35,40 @@ Game::Game(const int width_in, const int height_in, const char title_in[]) :
 			} else {
 				board[x][y].m_color = sf::Color(230,225,200);
 			}
+			board[x][y].piece.setSpriteScale(m_cellwidth / 64, m_cellheight / 64);
 		}
 	}
 
 	//initialize pieces
-	for (int i = 0; i <= 7; i++) {
-		board[i][1].piece.setstate(bpawn);
-		board[i][1].piece.setTexture(txh.GetTexture(board[i][1].piece.getstate()), board[i][1].m_x, board[i][1].m_y);
-	}
-	for (int i = 0; i <= 7; i++) {
-		board[i][6].piece.setstate(pawn);
-		board[i][6].piece.setTexture(txh.GetTexture(board[i][6].piece.getstate()), board[i][6].m_x, board[i][6].m_y);
-	}
+	//black pieces
+	for (int i = 0; i <= 7; i++) { inipiece(i, 1, bpawn); }
+	inipiece(0, 0, brook);
+	inipiece(7, 0, brook);
+	inipiece(1, 0, bknight);
+	inipiece(6, 0, bknight);
+	inipiece(2, 0, bbishop);
+	inipiece(5, 0, bbishop);
+	inipiece(3, 0, bqueen);
+	inipiece(4, 0, bking);
+	//white
+	for (int i = 0; i <= 7; i++) {inipiece(i, 6, pawn);}
+	inipiece(0, 7, rook);
+	inipiece(7, 7, rook);
+	inipiece(1, 7, knight);
+	inipiece(6, 7, knight);
+	inipiece(2, 7, bishop);
+	inipiece(5, 7, bishop);
+	inipiece(3, 7, queen);
+	inipiece(4, 7, king);
 }
 
 Game::~Game() {
 
+}
+
+void Game::inipiece(int x, int y, E_Piece state) {
+	board[x][y].piece.setstate(state);
+	board[x][y].piece.setTexture(txh.GetTexture(board[x][y].piece.getstate()), board[x][y].m_x, board[x][y].m_y);
 }
 
 void Game::start() {
@@ -72,8 +90,9 @@ void Game::start() {
 				//perhaps this should be in a function
 				m_mouse_x = sf::Mouse::getPosition(window).x / m_mouse_width;
 				m_mouse_y = sf::Mouse::getPosition(window).y / m_mouse_height;
-				std::cout << "mousecell: " << m_mouse_x << ", " << m_mouse_y << "\n";
-					//TODO make click do shit
+				std::cout << "mousecell: " << m_mouse_x << ", " << m_mouse_y << ". piece: "
+						  << board[m_mouse_x][m_mouse_y].piece.getstate() << "\n";
+				//TODO make click do shit
 				break;
 			case sf::Event::KeyPressed:
 				KeyPress();
@@ -95,11 +114,10 @@ void Game::start() {
 			if (onesec <= now) {
 				onesec += std::chrono::seconds(1);
 				if (fps != 0)
-					std::cout << fps << "\n";
+					std::cout << "fps: " << fps << "\n";
 				fps = 0;
 			}
 		}
-
 		lastTime = now;
 		accumulatedTime += deltaTime;
 	}
@@ -139,6 +157,7 @@ void Game::render() {
 		text.setCharacterSize(24);
 		text.setFont(*m_font_arial);
 		text.setString(i);
+		text.setFillColor(sf::Color::Black);
 		text.setPosition(sf::Vector2f((i - 65) * m_cellwidth + m_cellwidth - 32, m_height - 32));
 		window.draw(text);
 	}
@@ -149,6 +168,7 @@ void Game::render() {
 		text.setCharacterSize(24);
 		text.setFont(*m_font_arial);
 		text.setString(i);
+		text.setFillColor(sf::Color::Black);
 		text.setPosition(sf::Vector2f(4, m_cellheight * 8 - (i-48) * m_cellheight));
 		window.draw(text);
 	}

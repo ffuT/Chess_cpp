@@ -12,20 +12,17 @@
 
 class Piece{
 public :
-	Piece(int width, int height);
-	Piece(E_Piece piece);
+	Piece();
 	~Piece();
 	
 	void draw(sf::RenderWindow* windowptr);
 	void setTexture(sf::Texture* texture, int x, int y);
 	void setstate(E_Piece state_in);
+	void setSpriteScale(float scalex, float scaley);
 	E_Piece getstate();
 
 private :
-	int spritewidht;
-	int spriteheight;
 	
 	E_Piece m_state = empty;
 	sf::Sprite* sprite = new sf::Sprite;
-
 };
