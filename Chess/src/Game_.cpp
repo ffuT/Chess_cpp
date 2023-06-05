@@ -14,20 +14,21 @@
 //my includes
 #include "headers/Game.h"
 #include "headers/Cell.h"
+#include "headers/Texturehandler.h"
 
 Game::Game(const int width_in, const int height_in, const char title_in[]) :
 	m_width(width_in), m_height(height_in),
 	window(sf::VideoMode(width_in, height_in), title_in, sf::Style::Default), ev() {
 	windowptr = &window;
 	
-	m_font_arial.loadFromFile("Resources/Extra/arial.ttf");
+	m_font_arial->loadFromFile("Resources/Extra/arial.ttf");
 
-	//initialize board here:
+	//initialize board (2d cell array) here
 	for (int x = 0; x <= 7; x++) {
 		for (int y = 0; y <= 7; y++) {
-			board[x][y].m_width = m_cellwidth;
-			board[x][y].m_height = m_cellheight;
-			board[x][y].m_x = (int) x * m_cellwidth;
+			board[x][y].m_width = m_cellwidth;			
+			board[x][y].m_height = m_cellheight;		
+			board[x][y].m_x = (int) x * m_cellwidth;	
 			board[x][y].m_y = (int) y * m_cellheight;
 			if ((x + y) % 2 != 0) {
 				board[x][y].m_color = sf::Color(40,25,25);
@@ -36,8 +37,16 @@ Game::Game(const int width_in, const int height_in, const char title_in[]) :
 			}
 		}
 	}
-	//maybe do more shit heres
 
+	//initialize pieces
+	for (int i = 0; i <= 7; i++) {
+		board[i][1].piece.setstate(bpawn);
+		board[i][1].piece.setTexture(txh.GetTexture(board[i][1].piece.getstate()), board[i][1].m_x, board[i][1].m_y);
+	}
+	for (int i = 0; i <= 7; i++) {
+		board[i][6].piece.setstate(pawn);
+		board[i][6].piece.setTexture(txh.GetTexture(board[i][6].piece.getstate()), board[i][6].m_x, board[i][6].m_y);
+	}
 }
 
 Game::~Game() {
@@ -126,14 +135,20 @@ void Game::render() {
 
 	//draw letters based on ascii values 65 = 'A'
 	for (char i = 65; i <= 65 + 8; i++) {
-		sf::Text text(i, m_font_arial, 24);
+		sf::Text text;
+		text.setCharacterSize(24);
+		text.setFont(*m_font_arial);
+		text.setString(i);
 		text.setPosition(sf::Vector2f((i - 65) * m_cellwidth + m_cellwidth - 32, m_height - 32));
 		window.draw(text);
 	}
 
 	//draw numbers based on ascii values 49 = '1'
 	for (char i = 48; i <= 48 + 8; i++) {
-		sf::Text text(i, m_font_arial, 24);
+		sf::Text text;
+		text.setCharacterSize(24);
+		text.setFont(*m_font_arial);
+		text.setString(i);
 		text.setPosition(sf::Vector2f(4, m_cellheight * 8 - (i-48) * m_cellheight));
 		window.draw(text);
 	}

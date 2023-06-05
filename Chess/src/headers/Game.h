@@ -9,7 +9,7 @@
 #include <chrono>
 //my includes
 #include "headers/Cell.h"
-
+#include "Texturehandler.h"
 
 class Game {
 
@@ -41,10 +41,11 @@ private:
 	bool change = true;
 
 	Cell board[8][8];
+	TextureHandler txh;
 
 	sf::RenderWindow window;
 	sf::RenderWindow* windowptr = nullptr;
 	sf::Event ev;
-	sf::Font m_font_arial;
+	sf::Font* m_font_arial = new sf::Font;
 };
 

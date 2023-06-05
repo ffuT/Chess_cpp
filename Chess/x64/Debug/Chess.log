@@ -1,39 +1,4 @@
-﻿  Piece.cpp
-  Cell.cpp
-C:\Users\Tuff\Documents\GitHub\Chess_cpp\Chess\src\Cell.cpp(17,48): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-C:\Users\Tuff\Documents\GitHub\Chess_cpp\Chess\src\Cell.cpp(17,39): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-C:\Users\Tuff\Documents\GitHub\Chess_cpp\Chess\src\Cell.cpp(18,37): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-C:\Users\Tuff\Documents\GitHub\Chess_cpp\Chess\src\Cell.cpp(18,32): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-  main.cpp
+﻿  main.cpp
 C:\Users\Tuff\Documents\GitHub\Chess_cpp\Chess\src\headers\Game.h(31,36): warning C4244: 'initializing': conversion from 'int' to 'const float', possible loss of data
 C:\Users\Tuff\Documents\GitHub\Chess_cpp\Chess\src\headers\Game.h(32,38): warning C4244: 'initializing': conversion from 'int' to 'const float', possible loss of data
-  Game_.cpp
-C:\Users\Tuff\Documents\GitHub\Chess_cpp\Chess\src\headers\Game.h(31,36): warning C4244: 'initializing': conversion from 'int' to 'const float', possible loss of data
-C:\Users\Tuff\Documents\GitHub\Chess_cpp\Chess\src\headers\Game.h(32,38): warning C4244: 'initializing': conversion from 'int' to 'const float', possible loss of data
-C:\Users\Tuff\Documents\GitHub\Chess_cpp\Chess\src\Game_.cpp(28,26): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
-C:\Users\Tuff\Documents\GitHub\Chess_cpp\Chess\src\Game_.cpp(29,27): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
-C:\Users\Tuff\Documents\GitHub\Chess_cpp\Chess\src\Game_.cpp(30,30): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-C:\Users\Tuff\Documents\GitHub\Chess_cpp\Chess\src\Game_.cpp(31,30): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-C:\Users\Tuff\Documents\GitHub\Chess_cpp\Chess\src\Game_.cpp(130,85): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-  Generating Code...
   Chess.vcxproj -> C:\Users\Tuff\Documents\GitHub\Chess_cpp\Chess\x64\Debug\Chess.exe

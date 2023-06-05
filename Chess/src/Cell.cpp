@@ -9,14 +9,17 @@
 Cell::Cell() {
 }
 
-
 Cell::~Cell() {
 }
 
+void Cell::update() {
+	//do shit
+}
+
 void Cell::draw(sf::RenderWindow* windowptr) {
-	sf::RectangleShape rect(sf::Vector2f(m_width, m_height));
-	rect.setPosition(sf::Vector2f(m_x, m_y));
-	rect.setFillColor(m_color);
-	windowptr->draw(rect);
+	sf::RectangleShape*  rect = new sf::RectangleShape(sf::Vector2f(m_width, m_height));
+	rect->setPosition(sf::Vector2f(m_x, m_y));
+	rect->setFillColor(m_color);
+	windowptr->draw(*rect);
 	piece.draw(windowptr);
 }

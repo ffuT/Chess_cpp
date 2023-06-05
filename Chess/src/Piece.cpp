@@ -6,8 +6,9 @@
 //my includes
 #include "headers/Piece.h"
 
-Piece::Piece() {
-
+Piece::Piece(int width, int height) {
+	spritewidht = width;
+	spriteheight = height;
 }
 
 Piece::Piece(E_Piece piece) {
@@ -15,32 +16,22 @@ Piece::Piece(E_Piece piece) {
 }
 
 Piece::~Piece() {
-
+	delete sprite;
 }
 
-void Piece::update() {
-	//yes
+E_Piece Piece::getstate() {
+	return m_state;
+}
+
+void Piece::setstate(E_Piece state_in) {
+	m_state = state_in;
+}
+
+void Piece::setTexture(sf::Texture* texture, int x, int y) {
+	sprite->setTexture(*texture);
+	sprite->setPosition(sf::Vector2f(x, y));
 }
 
 void Piece::draw(sf::RenderWindow* windowptr) {
-	switch (m_state) {
-	case empty:
-		return;
-	case pawn:
-		//update sprite to pawn
-		break;
-	case bishop:
-		break;
-	case knight:
-		break;
-	case rook:
-		break;
-	case queen:
-		break;
-	case king:
-		break;
-	default:
-		break;
-	}
-	//windowptr->draw(sprite);
+	windowptr->draw(*sprite);
 }

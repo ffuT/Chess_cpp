@@ -137,12 +137,14 @@
     <ClCompile Include="src\Cell.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Game_.cpp" />
+    <ClCompile Include="src\Texturehandler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\headers\Piece.h" />
     <ClInclude Include="src\headers\Cell.h" />
     <ClInclude Include="src\headers\Game.h" />
-    <ClInclude Include="src\headers\PieceEnum.h" />
+    <ClInclude Include="src\headers\Enums.h" />
+    <ClInclude Include="src\headers\Texturehandler.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

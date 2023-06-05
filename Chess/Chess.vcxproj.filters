@@ -27,6 +27,9 @@
     <ClCompile Include="src\Piece.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Texturehandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\headers\Game.h">
@@ -38,7 +41,10 @@
     <ClInclude Include="src\headers\Piece.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\headers\PieceEnum.h">
+    <ClInclude Include="src\headers\Enums.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\headers\Texturehandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
