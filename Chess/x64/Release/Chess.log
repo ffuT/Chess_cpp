@@ -1,0 +1,29 @@
+﻿  Cell.cpp
+  main.cpp
+C:\Users\Tuff\Documents\GitHub\Chess_cpp\Chess\src\headers\Game.h(31,36): warning C4244: 'initializing': conversion from 'int' to 'const float', possible loss of data
+C:\Users\Tuff\Documents\GitHub\Chess_cpp\Chess\src\headers\Game.h(32,38): warning C4244: 'initializing': conversion from 'int' to 'const float', possible loss of data
+  Game_.cpp
+C:\Users\Tuff\Documents\GitHub\Chess_cpp\Chess\src\headers\Game.h(31,36): warning C4244: 'initializing': conversion from 'int' to 'const float', possible loss of data
+C:\Users\Tuff\Documents\GitHub\Chess_cpp\Chess\src\headers\Game.h(32,38): warning C4244: 'initializing': conversion from 'int' to 'const float', possible loss of data
+C:\Users\Tuff\Documents\GitHub\Chess_cpp\Chess\src\Game_.cpp(27,24): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\Tuff\Documents\GitHub\Chess_cpp\Chess\src\Game_.cpp(28,24): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\Tuff\Documents\GitHub\Chess_cpp\Chess\src\Game_.cpp(123,48): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\Tuff\Documents\GitHub\Chess_cpp\Chess\src\Game_.cpp(129,63): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\Tuff\Documents\GitHub\Chess_cpp\Chess\src\Game_.cpp(129,46): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+  Generating code
+  Previous IPDB not found, fall back to full compilation.
+  All 111 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  Chess.vcxproj -> C:\Users\Tuff\Documents\GitHub\Chess_cpp\Chess\x64\Release\Chess.exe
