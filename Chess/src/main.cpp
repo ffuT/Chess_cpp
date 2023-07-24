@@ -9,7 +9,7 @@
 //its too abstract/too deep
 //no need for a cell class
 //also the texture handler could probobly be better. 
-//perhaps with a singe large texture map or better written idk :P
+//perhaps with a single large texture map or better written idk :P
 
 int main() {
 
