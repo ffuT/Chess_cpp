@@ -99,6 +99,7 @@ void Game::start() {
 		//limit render if constant window events
 		while (accumulatedTime >= targetFramerate) {
 			render();
+			change = false;
 			accumulatedTime -= targetFramerate;
 		}
 		lastTime = now;
@@ -121,68 +122,42 @@ void Game::mouseClicked() {
 		selectedX = m_mouse_x;
 		selectedY = m_mouse_y;
 		calcLegalMoves();
-
 		if(board[selectedX][selectedY] != 0){  //cant select empty cells
 			std::cout << static_cast<char>(selectedX + 65) << abs(selectedY - 8) << " selected\n";
 			cellSelected = true;
 		}
 
 	} else {
-			if(legalMoves[m_mouse_x][m_mouse_y]) {
-				std::cout << static_cast<char>(selectedX + 65) << abs(selectedY - 8) <<
-					" moved to: " << static_cast<char>(m_mouse_x + 65) <<
-					abs(m_mouse_y - 8) << "\n";
+		if(legalMoves[m_mouse_x][m_mouse_y]) {	//if legal move move
+			std::cout << static_cast<char>(selectedX + 65) << abs(selectedY - 8) <<
+				" moved to: " << static_cast<char>(m_mouse_x + 65) <<
+				abs(m_mouse_y - 8) << "\n";
 
-				board[m_mouse_x][m_mouse_y] = board[selectedX][selectedY];
-				board[selectedX][selectedY] = E_Piece::empty;
+			board[m_mouse_x][m_mouse_y] = board[selectedX][selectedY];
+			board[selectedX][selectedY] = E_Piece::empty;
 
-				cellSelected = false;
-			}
-			else if (m_mouse_x == selectedX && m_mouse_y == selectedY) {
-				cellSelected = false;
-			}
-
-			for (auto& rows : legalMoves) //clear legalmoves
-			{
-				for (auto& elem : rows)
-				{
-					elem = false;
-				}
-			}
+			cellSelected = false;
+			clearLegalMoves();
+		}	//if i click on already selected de-select 
+		else if (m_mouse_x == selectedX && m_mouse_y == selectedY) {
+			cellSelected = false;
+			clearLegalMoves();
+		} //if i click on another on my team swap selected 
+		else if (board[m_mouse_x][m_mouse_y] * board[selectedX][selectedY] >= 0) {
+			cellSelected = false;
+			mouseClicked();	// select the other piece
+		}	
 	}
+	render();	// render to always display moves
 }
 
-void Game::calcLegalMoves() {
-	for (auto& rows : legalMoves) // Iterating over rows
-	{
-		for (auto& elem : rows)
-		{
+void Game::clearLegalMoves() {
+	change = true;
+	// clear legal moves array (all = false)
+	for (auto& rows : legalMoves){
+		for (auto& elem : rows){
 			elem = false;
 		}
-	}
-
-	//i need to switch cause pawn are diffrent
-	switch (board[selectedX][selectedY]) {
-	case empty:
-		return;
-	case bpawn:
-		legalMoves[selectedX][selectedY + 1] = true;
-		return;
-	case pawn:
-		legalMoves[selectedX][selectedY - 1] = true;
-		return;
-	}
-	switch (abs(board[selectedX][selectedY])){
-	case bishop:
-		break;
-	case knight:
-		break;
-	case rook:
-		break;
-	case queen:
-		break;
-	case king:
-		break;
 	}
 }
 
@@ -214,13 +189,12 @@ void Game::render() {
 			if ((x - y) % 2 == 0) {
 				backGroundRect.setFillColor(sf::Color(200, 195, 155));
 				if(legalMoves[x][y])
-					backGroundRect.setFillColor(sf::Color(177, 220, 140));
+					backGroundRect.setFillColor(sf::Color(172, 200, 110));
 			}
 			else {
 				backGroundRect.setFillColor(sf::Color(100, 44, 5));
 				if (legalMoves[x][y])
 					backGroundRect.setFillColor(sf::Color(114, 140, 20));
-
 			}
 			
 			window.draw(backGroundRect);
@@ -259,5 +233,453 @@ void Game::render() {
 	}
 
 	window.display();
-	change = false;
+}
+
+void Game::calcLegalMoves() {	//this function sucks... but it works so fuck you
+	clearLegalMoves();
+	//i need to switch cause pawn are diffrent
+	switch (board[selectedX][selectedY]) {
+	case empty:	//if its empty fuck off pwease :3
+		return;
+	case bpawn:
+		if (selectedY == 1) {	//first time moving
+			if (board[selectedX][selectedY + 1] == 0) {	//if not blocked 1 forward
+				legalMoves[selectedX][selectedY + 1] = true;
+				if (board[selectedX][selectedY + 2] == 0)	//if not blocked 2 forward
+					legalMoves[selectedX][selectedY + 2] = true;
+			}
+		}
+		else {	//not first time moving
+			if (board[selectedX][selectedY + 1] == 0)	//if infront not blocked
+				legalMoves[selectedX][selectedY + 1] = true;
+		}
+		if (board[selectedX - 1][selectedY + 1] > 0)	//if diagonal left is enemy
+			legalMoves[selectedX - 1][selectedY + 1] = true;
+		if (board[selectedX + 1][selectedY + 1] > 0)	//if diagonal right is enemy
+			legalMoves[selectedX + 1][selectedY + 1] = true;
+		break;
+	case pawn:	//same as black pawn just other way
+		if (selectedY == 6) {	//first time moving
+			if (board[selectedX][selectedY - 1] == 0) {
+				legalMoves[selectedX][selectedY - 1] = true;
+				if (board[selectedX][selectedY - 2] == 0)
+					legalMoves[selectedX][selectedY - 2] = true;
+			}
+		}
+		else {
+			if (board[selectedX][selectedY - 1] == 0)
+				legalMoves[selectedX][selectedY - 1] = true;
+		}
+		if (board[selectedX - 1][selectedY - 1] < 0)
+			legalMoves[selectedX - 1][selectedY - 1] = true;
+		if (board[selectedX + 1][selectedY - 1] < 0)
+			legalMoves[selectedX + 1][selectedY - 1] = true;
+		break;
+	case bishop:
+		for (int i = 1; i < 8; i++) { // diagonal up right
+			if (selectedX + i > 7 || selectedY - i < 0)
+				break;
+			if (board[selectedX + i][selectedY - i] == 0) {	// if empty
+				legalMoves[selectedX + i][selectedY - i] = true;
+			}
+			if (board[selectedX + i][selectedY - i] != 0) {	// if taken
+				if (board[selectedX + i][selectedY - i] < 0)	// if enemy 
+					legalMoves[selectedX + i][selectedY - i] = true;
+				break;
+			}
+		}
+		for (int i = 1; i < 8; i++) { // diagonal up left
+			if (selectedX - i < 0 || selectedY - i < 0)
+				break;
+			if (board[selectedX - i][selectedY - i] == 0) {	// if empty
+				legalMoves[selectedX - i][selectedY - i] = true;
+			}
+			if (board[selectedX - i][selectedY - i] != 0) {	// if taken
+				if (board[selectedX - i][selectedY - i] < 0)	// if enemy 
+					legalMoves[selectedX - i][selectedY - i] = true;
+				break;
+			}
+		}
+		for (int i = 1; i < 8; i++) { // diagonal down right
+			if (selectedX + i > 7 || selectedY + i > 7)
+				break;
+			if (board[selectedX + i][selectedY + i] == 0) {	// if empty
+				legalMoves[selectedX + i][selectedY + i] = true;
+			}
+			if (board[selectedX + i][selectedY + i] != 0) {	// if taken
+				if (board[selectedX + i][selectedY + i] < 0)	// if enemy 
+					legalMoves[selectedX + i][selectedY + i] = true;
+				break;
+			}
+		}
+		for (int i = 1; i < 8; i++) { // diagonal down left
+			if (selectedX - i < 0 || selectedY + i > 7)
+				break;
+			if (board[selectedX - i][selectedY + i] == 0) {	// if empty
+				legalMoves[selectedX - i][selectedY + i] = true;
+			}
+			if (board[selectedX - i][selectedY + i] != 0) {	// if taken
+				if (board[selectedX - i][selectedY + i] < 0)	// if enemy 
+					legalMoves[selectedX - i][selectedY + i] = true;
+				break;
+			}
+		}
+		break;
+	case bbishop:
+		for (int i = 1; i < 8; i++) { // diagonal up right
+			if (selectedX + i > 7 || selectedY - i < 0)
+				break;
+			if (board[selectedX + i][selectedY - i] == 0) {	// if empty
+				legalMoves[selectedX + i][selectedY - i] = true;
+			}
+			if (board[selectedX + i][selectedY - i] != 0) {	// if taken
+				if (board[selectedX + i][selectedY - i] > 0)	// if enemy 
+					legalMoves[selectedX + i][selectedY - i] = true;
+				break;
+			}
+		}
+		for (int i = 1; i < 8; i++) { // diagonal up left
+			if (selectedX - i < 0 || selectedY - i < 0)
+				break;
+			if (board[selectedX - i][selectedY - i] == 0) {	// if empty
+				legalMoves[selectedX - i][selectedY - i] = true;
+			}
+			if (board[selectedX - i][selectedY - i] != 0) {	// if taken
+				if (board[selectedX - i][selectedY - i] > 0)	// if enemy 
+					legalMoves[selectedX - i][selectedY - i] = true;
+				break;
+			}
+		}
+		for (int i = 1; i < 8; i++) { // diagonal down right
+			if (selectedX + i > 7 || selectedY + i > 7)
+				break;
+			if (board[selectedX + i][selectedY + i] == 0) {	// if empty
+				legalMoves[selectedX + i][selectedY + i] = true;
+			}
+			if (board[selectedX + i][selectedY + i] != 0) {	// if taken
+				if (board[selectedX + i][selectedY + i] > 0)	// if enemy 
+					legalMoves[selectedX + i][selectedY + i] = true;
+				break;
+			}
+		}
+		for (int i = 1; i < 8; i++) { // diagonal down left
+			if (selectedX - i < 0 || selectedY + i > 7)
+				break;
+			if (board[selectedX - i][selectedY + i] == 0) {	// if empty
+				legalMoves[selectedX - i][selectedY + i] = true;
+			}
+			if (board[selectedX - i][selectedY + i] != 0) {	// if taken
+				if (board[selectedX - i][selectedY + i] > 0)	// if enemy 
+					legalMoves[selectedX - i][selectedY + i] = true;
+				break;
+			}
+		}
+		break;
+	case knight:
+
+		break;
+	case bknight:
+
+		break;
+	case rook:
+		for (int i = 1; i < 8; i++) {	//up
+			if (selectedY - i < 0)	// stop on 0
+				break;
+			if (board[selectedX][selectedY - i] == 0) {	// if empty legal
+				legalMoves[selectedX][selectedY - i] = true;
+			}
+			if (board[selectedX][selectedY - i] != 0) {	// if taken
+				if (board[selectedX][selectedY - i] < 0)	// if enemy legal
+					legalMoves[selectedX][selectedY - i] = true;
+				break;
+			}
+		}
+		for (int i = 1; i < 8; i++) {	//down
+			if (selectedY + i > 7)	//stop on 8
+				break;
+			if (board[selectedX][selectedY + i] == 0) {	//if empty
+				legalMoves[selectedX][selectedY + i] = true;
+			}
+			if (board[selectedX][selectedY + i] != 0) {	//if taken
+				if (board[selectedX][selectedY + i] < 0) //if enemy legal
+					legalMoves[selectedX][selectedY + i] = true;
+				break;
+			}
+		}
+		for (int i = 1; i < 8; i++) { //left
+			if (selectedX - i < 0)	//stop on 8
+				break;
+			if (board[selectedX - i][selectedY] == 0) {	//if empty
+				legalMoves[selectedX - i][selectedY] = true;
+			}
+			if (board[selectedX - i][selectedY] != 0) {	//if taken
+				if (board[selectedX - i][selectedY] < 0) //if enemy legal
+					legalMoves[selectedX - i][selectedY] = true;
+				break;
+			}
+		}
+		for (int i = 1; i < 8; i++) { //right
+			if (selectedX + i > 7)	//stop on 8
+				break;
+			if (board[selectedX + i][selectedY] == 0) {	//if empty
+				legalMoves[selectedX + i][selectedY] = true;
+			}
+			if (board[selectedX + i][selectedY] != 0) {	//if taken
+				if (board[selectedX + i][selectedY] < 0) //if enemy legal
+					legalMoves[selectedX + i][selectedY] = true;
+				break;
+			}
+		}
+		break;
+	case brook:
+		for (int i = 1; i < 8; i++) {
+			if (selectedY - i < 0)	// stop on 0
+				break;
+			if (board[selectedX][selectedY - i] == 0) {	// if empty legal
+				legalMoves[selectedX][selectedY - i] = true;
+			}
+			if (board[selectedX][selectedY - i] != 0) {	// if taken
+				if (board[selectedX][selectedY - i] > 0)	// if enemy legal
+					legalMoves[selectedX][selectedY - i] = true;
+				break;
+			}
+		}
+		for (int i = 1; i < 8; i++) {
+			if (selectedY + i > 7)	//stop on 8
+				break;
+			if (board[selectedX][selectedY + i] == 0) {	//if empty
+				legalMoves[selectedX][selectedY + i] = true;
+			}
+			if (board[selectedX][selectedY + i] != 0) {	//if taken
+				if (board[selectedX][selectedY + i] > 0) //if enemy legal
+					legalMoves[selectedX][selectedY + i] = true;
+				break;
+			}
+		}
+		for (int i = 1; i < 8; i++) {
+			if (selectedX - i < 0)	//stop on 8
+				break;
+			if (board[selectedX - i][selectedY] == 0) {	//if empty
+				legalMoves[selectedX - i][selectedY] = true;
+			}
+			if (board[selectedX - i][selectedY] != 0) {	//if taken
+				if (board[selectedX - i][selectedY] > 0) //if enemy legal
+					legalMoves[selectedX - i][selectedY] = true;
+				break;
+			}
+		}
+		for (int i = 1; i < 8; i++) {
+			if (selectedX + i > 7)	//stop on 8
+				break;
+			if (board[selectedX + i][selectedY] == 0) {	//if empty
+				legalMoves[selectedX + i][selectedY] = true;
+			}
+			if (board[selectedX + i][selectedY] != 0) {	//if taken
+				if (board[selectedX + i][selectedY] > 0) //if enemy legal
+					legalMoves[selectedX + i][selectedY] = true;
+				break;
+			}
+		}
+		break;
+	case queen:
+		for (int i = 1; i < 8; i++) { // diagonal up right
+			if (selectedX + i > 7 || selectedY - i < 0)
+				break;
+			if (board[selectedX + i][selectedY - i] == 0) {	// if empty
+				legalMoves[selectedX + i][selectedY - i] = true;
+			}
+			if (board[selectedX + i][selectedY - i] != 0) {	// if taken
+				if (board[selectedX + i][selectedY - i] < 0)	// if enemy 
+					legalMoves[selectedX + i][selectedY - i] = true;
+				break;
+			}
+		}
+		for (int i = 1; i < 8; i++) { // diagonal up left
+			if (selectedX - i < 0 || selectedY - i < 0)
+				break;
+			if (board[selectedX - i][selectedY - i] == 0) {	// if empty
+				legalMoves[selectedX - i][selectedY - i] = true;
+			}
+			if (board[selectedX - i][selectedY - i] != 0) {	// if taken
+				if (board[selectedX - i][selectedY - i] < 0)	// if enemy 
+					legalMoves[selectedX - i][selectedY - i] = true;
+				break;
+			}
+		}
+		for (int i = 1; i < 8; i++) { // diagonal down right
+			if (selectedX + i > 7 || selectedY + i > 7)
+				break;
+			if (board[selectedX + i][selectedY + i] == 0) {	// if empty
+				legalMoves[selectedX + i][selectedY + i] = true;
+			}
+			if (board[selectedX + i][selectedY + i] != 0) {	// if taken
+				if (board[selectedX + i][selectedY + i] < 0)	// if enemy 
+					legalMoves[selectedX + i][selectedY + i] = true;
+				break;
+			}
+		}
+		for (int i = 1; i < 8; i++) { // diagonal down left
+			if (selectedX - i < 0 || selectedY + i > 7)
+				break;
+			if (board[selectedX - i][selectedY + i] == 0) {	// if empty
+				legalMoves[selectedX - i][selectedY + i] = true;
+			}
+			if (board[selectedX - i][selectedY + i] != 0) {	// if taken
+				if (board[selectedX - i][selectedY + i] < 0)	// if enemy 
+					legalMoves[selectedX - i][selectedY + i] = true;
+				break;
+			}
+		}
+		for (int i = 1; i < 8; i++) {
+			if (selectedY - i < 0)	// stop on 0
+				break;
+			if (board[selectedX][selectedY - i] == 0) {	// if empty legal
+				legalMoves[selectedX][selectedY - i] = true;
+			}
+			if (board[selectedX][selectedY - i] != 0) {	// if taken
+				if (board[selectedX][selectedY - i] < 0)	// if enemy legal
+					legalMoves[selectedX][selectedY - i] = true;
+				break;
+			}
+		}
+		for (int i = 1; i < 8; i++) {
+			if (selectedY + i > 7)	//stop on 8
+				break;
+			if (board[selectedX][selectedY + i] == 0) {	//if empty
+				legalMoves[selectedX][selectedY + i] = true;
+			}
+			if (board[selectedX][selectedY + i] != 0) {	//if taken
+				if (board[selectedX][selectedY + i] < 0) //if enemy legal
+					legalMoves[selectedX][selectedY + i] = true;
+				break;
+			}
+		}
+		for (int i = 1; i < 8; i++) {
+			if (selectedX - i < 0)	//stop on 8
+				break;
+			if (board[selectedX - i][selectedY] == 0) {	//if empty
+				legalMoves[selectedX - i][selectedY] = true;
+			}
+			if (board[selectedX - i][selectedY] != 0) {	//if taken
+				if (board[selectedX - i][selectedY] < 0) //if enemy legal
+					legalMoves[selectedX - i][selectedY] = true;
+				break;
+			}
+		}
+		for (int i = 1; i < 8; i++) {
+			if (selectedX + i > 7)	//stop on 8
+				break;
+			if (board[selectedX + i][selectedY] == 0) {	//if empty
+				legalMoves[selectedX + i][selectedY] = true;
+			}
+			if (board[selectedX + i][selectedY] != 0) {	//if taken
+				if (board[selectedX + i][selectedY] < 0) //if enemy legal
+					legalMoves[selectedX + i][selectedY] = true;
+				break;
+			}
+		}
+		break;
+	case bqueen:
+		for (int i = 1; i < 8; i++) { // diagonal up right
+			if (selectedX + i > 7 || selectedY - i < 0)
+				break;
+			if (board[selectedX + i][selectedY - i] == 0) {	// if empty
+				legalMoves[selectedX + i][selectedY - i] = true;
+			}
+			if (board[selectedX + i][selectedY - i] != 0) {	// if taken
+				if (board[selectedX + i][selectedY - i] > 0)	// if enemy 
+					legalMoves[selectedX + i][selectedY - i] = true;
+				break;
+			}
+		}
+		for (int i = 1; i < 8; i++) { // diagonal up left
+			if (selectedX - i < 0 || selectedY - i < 0)
+				break;
+			if (board[selectedX - i][selectedY - i] == 0) {	// if empty
+				legalMoves[selectedX - i][selectedY - i] = true;
+			}
+			if (board[selectedX - i][selectedY - i] != 0) {	// if taken
+				if (board[selectedX - i][selectedY - i] > 0)	// if enemy 
+					legalMoves[selectedX - i][selectedY - i] = true;
+				break;
+			}
+		}
+		for (int i = 1; i < 8; i++) { // diagonal down right
+			if (selectedX + i > 7 || selectedY + i > 7)
+				break;
+			if (board[selectedX + i][selectedY + i] == 0) {	// if empty
+				legalMoves[selectedX + i][selectedY + i] = true;
+			}
+			if (board[selectedX + i][selectedY + i] != 0) {	// if taken
+				if (board[selectedX + i][selectedY + i] > 0)	// if enemy 
+					legalMoves[selectedX + i][selectedY + i] = true;
+				break;
+			}
+		}
+		for (int i = 1; i < 8; i++) { // diagonal down left
+			if (selectedX - i < 0 || selectedY + i > 7)
+				break;
+			if (board[selectedX - i][selectedY + i] == 0) {	// if empty
+				legalMoves[selectedX - i][selectedY + i] = true;
+			}
+			if (board[selectedX - i][selectedY + i] != 0) {	// if taken
+				if (board[selectedX - i][selectedY + i] > 0)	// if enemy 
+					legalMoves[selectedX - i][selectedY + i] = true;
+				break;
+			}
+		}
+		for (int i = 1; i < 8; i++) {
+			if (selectedY - i < 0)	// stop on 0
+				break;
+			if (board[selectedX][selectedY - i] == 0) {	// if empty legal
+				legalMoves[selectedX][selectedY - i] = true;
+			}
+			if (board[selectedX][selectedY - i] != 0) {	// if taken
+				if (board[selectedX][selectedY - i] > 0)	// if enemy legal
+					legalMoves[selectedX][selectedY - i] = true;
+				break;
+			}
+		}
+		for (int i = 1; i < 8; i++) {
+			if (selectedY + i > 7)	//stop on 8
+				break;
+			if (board[selectedX][selectedY + i] == 0) {	//if empty
+				legalMoves[selectedX][selectedY + i] = true;
+			}
+			if (board[selectedX][selectedY + i] != 0) {	//if taken
+				if (board[selectedX][selectedY + i] > 0) //if enemy legal
+					legalMoves[selectedX][selectedY + i] = true;
+				break;
+			}
+		}
+		for (int i = 1; i < 8; i++) {
+			if (selectedX - i < 0)	//stop on 8
+				break;
+			if (board[selectedX - i][selectedY] == 0) {	//if empty
+				legalMoves[selectedX - i][selectedY] = true;
+			}
+			if (board[selectedX - i][selectedY] != 0) {	//if taken
+				if (board[selectedX - i][selectedY] > 0) //if enemy legal
+					legalMoves[selectedX - i][selectedY] = true;
+				break;
+			}
+		}
+		for (int i = 1; i < 8; i++) {
+			if (selectedX + i > 7)	//stop on 8
+				break;
+			if (board[selectedX + i][selectedY] == 0) {	//if empty
+				legalMoves[selectedX + i][selectedY] = true;
+			}
+			if (board[selectedX + i][selectedY] != 0) {	//if taken
+				if (board[selectedX + i][selectedY] > 0) //if enemy legal
+					legalMoves[selectedX + i][selectedY] = true;
+				break;
+			}
+		}
+		break;
+	case king:
+		break;
+	case bking:
+		break;
+	}
 }

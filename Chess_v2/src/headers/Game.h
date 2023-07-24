@@ -25,6 +25,7 @@ private:
 	void inipiece(int x, int y, E_Piece state);
 	void mouseClicked();
 	void calcLegalMoves();
+	void clearLegalMoves();
 
 private:
 	//dimensions

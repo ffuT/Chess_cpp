@@ -1,10 +1,10 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(531,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (Chess.vcxproj).  This can lead to incorrect clean and rebuild behavior.
   Game_.cpp
-C:\Users\Tuff\Documents\GitHub\Chess_cpp\Chess_v2\src\headers\Game.h(34,36): warning C4244: 'initializing': conversion from 'int' to 'const float', possible loss of data
-C:\Users\Tuff\Documents\GitHub\Chess_cpp\Chess_v2\src\headers\Game.h(35,38): warning C4244: 'initializing': conversion from 'int' to 'const float', possible loss of data
-C:\Users\Tuff\Documents\GitHub\Chess_cpp\Chess_v2\src\Game_.cpp(231,92): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Users\Tuff\Documents\GitHub\Chess_cpp\Chess_v2\src\Game_.cpp(231,75): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Users\Tuff\Documents\GitHub\Chess_cpp\Chess_v2\src\Game_.cpp(245,85): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+C:\Users\Tuff\Documents\GitHub\Chess_cpp\Chess_v2\src\headers\Game.h(35,36): warning C4244: 'initializing': conversion from 'int' to 'const float', possible loss of data
+C:\Users\Tuff\Documents\GitHub\Chess_cpp\Chess_v2\src\headers\Game.h(36,38): warning C4244: 'initializing': conversion from 'int' to 'const float', possible loss of data
+C:\Users\Tuff\Documents\GitHub\Chess_cpp\Chess_v2\src\Game_.cpp(207,92): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\Tuff\Documents\GitHub\Chess_cpp\Chess_v2\src\Game_.cpp(207,75): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\Tuff\Documents\GitHub\Chess_cpp\Chess_v2\src\Game_.cpp(221,85): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
