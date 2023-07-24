@@ -135,17 +135,24 @@ void Game::mouseClicked() {
 
 				board[m_mouse_x][m_mouse_y] = board[selectedX][selectedY];
 				board[selectedX][selectedY] = E_Piece::empty;
-				cellSelected = false;
 
+				cellSelected = false;
 			}
 			else if (m_mouse_x == selectedX && m_mouse_y == selectedY) {
 				cellSelected = false;
+			}
+
+			for (auto& rows : legalMoves) //clear legalmoves
+			{
+				for (auto& elem : rows)
+				{
+					elem = false;
+				}
 			}
 	}
 }
 
 void Game::calcLegalMoves() {
-
 	for (auto& rows : legalMoves) // Iterating over rows
 	{
 		for (auto& elem : rows)
@@ -206,9 +213,14 @@ void Game::render() {
 			
 			if ((x - y) % 2 == 0) {
 				backGroundRect.setFillColor(sf::Color(200, 195, 155));
+				if(legalMoves[x][y])
+					backGroundRect.setFillColor(sf::Color(177, 220, 140));
 			}
 			else {
 				backGroundRect.setFillColor(sf::Color(100, 44, 5));
+				if (legalMoves[x][y])
+					backGroundRect.setFillColor(sf::Color(114, 140, 20));
+
 			}
 			
 			window.draw(backGroundRect);
