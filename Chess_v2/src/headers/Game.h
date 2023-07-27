@@ -32,12 +32,12 @@ private:
 	const int m_width;
 	const int m_height;
 	const int m_cellAmount = 8;
-	const float m_cellwidth = m_width / m_cellAmount;		//dynamic cellsize x
+	const float m_cellwidth = m_width / m_cellAmount;	//dynamic cellsize x
 	const float m_cellheight = m_height / m_cellAmount;	//dynamic cellsize y
 	
 	//gameloop
-	const float MAXFPS = 30.0;													//targetframerate		
-	const float targetFramerate = 1.0f / MAXFPS;				//target frametime
+	const float MAXFPS = 30.0;	//targetframerate		
+	const float targetFramerate = 1.0f / MAXFPS;	//target frametime
 	bool change = true;
 	
 	//mouse pos

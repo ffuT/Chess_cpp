@@ -236,8 +236,8 @@ void Game::render() {
 }
 
 void Game::calcLegalMoves() {	//this function sucks... but it works so fuck you
+	//like its really bad
 	clearLegalMoves();
-	//i need to switch cause pawn are diffrent
 	switch (board[selectedX][selectedY]) {
 	case empty:	//if its empty fuck off pwease :3
 		return;
@@ -376,6 +376,30 @@ void Game::calcLegalMoves() {	//this function sucks... but it works so fuck you
 		}
 		break;
 	case knight:
+		if (selectedX - 1 >= 0) {	// x - 1 in x calc y-2 & +2
+			if (board[selectedX - 1][selectedY + 2] <= 0 && selectedY + 2 <= 7)
+				legalMoves[selectedX - 1][selectedY + 2] = true;
+			if (board[selectedX - 1][selectedY - 2] <= 0 && selectedY - 2 >= 0)
+				legalMoves[selectedX - 1][selectedY - 2] = true;
+		}
+		if(selectedX - 2 >= 0){	// x - 2 in x calc y-2 & +2
+			if (board[selectedX - 2][selectedY + 1] <= 0 && selectedY + 1 <= 7)
+				legalMoves[selectedX - 2][selectedY + 1] = true;
+			if (board[selectedX - 2][selectedY - 1] <= 0 && selectedY - 1 >= 0)
+				legalMoves[selectedX - 2][selectedY - 1] = true;
+		}
+		if (selectedX + 1 <= 7) { // x + 1 in x calc y-2 & +2
+			if (board[selectedX + 1][selectedY + 2] <= 0 && selectedY + 2 <= 7)
+				legalMoves[selectedX + 1][selectedY + 2] = true;
+			if (board[selectedX + 1][selectedY - 2] <= 0 && selectedY - 2 >= 0)
+				legalMoves[selectedX + 1][selectedY - 2] = true;
+		}
+		if (selectedX + 2 <= 7) { // x + 2 in x calc y-2 & +2
+			if (board[selectedX + 2][selectedY + 1] <= 0 && selectedY + 1 <= 7)
+				legalMoves[selectedX + 2][selectedY + 1] = true;
+			if (board[selectedX + 2][selectedY - 1] <= 0 && selectedY - 1 >= 0)
+				legalMoves[selectedX + 2][selectedY - 1] = true;
+		}
 
 		break;
 	case bknight:
@@ -579,6 +603,7 @@ void Game::calcLegalMoves() {	//this function sucks... but it works so fuck you
 			}
 		}
 		break;
+		//this is so dumb, ctrl + c -> ctrl v
 	case bqueen:
 		for (int i = 1; i < 8; i++) { // diagonal up right
 			if (selectedX + i > 7 || selectedY - i < 0)
