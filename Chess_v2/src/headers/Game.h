@@ -18,6 +18,7 @@ public:
 	
 	~Game();
 	void start();
+	void stop();
 private:
 	void KeyPress();
 	void KeyRelease();
@@ -36,20 +37,21 @@ private:
 	const float m_cellheight = m_height / m_cellAmount;	//dynamic cellsize y
 	
 	//gameloop
-	const float MAXFPS = 30.0;	//targetframerate		
+	bool running;
+	const float MAXFPS = 24.0;	//targetframerate		
 	const float targetFramerate = 1.0f / MAXFPS;	//target frametime
 	bool change = true;
 	
 	//mouse pos
-	int m_mouse_y = 0;
-	int m_mouse_x = 0;
+	int m_mouse_y;
+	int m_mouse_x;
 	int m_mouse_width = m_width / m_cellAmount;
 	int m_mouse_height = m_height / m_cellAmount;
 	
 	//game logic
 	bool whiteTurn = true;
 	bool cellSelected = false;
-	int selectedX, selectedY;
+	int selectedX=7, selectedY=7;
 	int board[8][8];
 	bool legalMoves[8][8];
 	

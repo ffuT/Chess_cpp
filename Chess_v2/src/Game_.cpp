@@ -61,15 +61,21 @@ void Game::inipiece(int x, int y, E_Piece state) {
 	board[x][y] = state;
 }
 
+void Game::stop() {
+	running = false;
+	window.close();
+}
+
 void Game::start() {
 	//gameloop
+	running = true;
 	auto onesec = std::chrono::steady_clock::now() + std::chrono::seconds(1);
 	auto lastTime = std::chrono::steady_clock::now();
 	float accumulatedTime = 0.0f;
 
 	render(); //render before the loop cuz of waitevent
 
-	while (window.isOpen()) {		//window loop
+	while (running) {		//window loop
 		auto now = std::chrono::steady_clock::now();
 		auto deltaTime = std::chrono::duration<float>(now - lastTime).count();
 
@@ -115,19 +121,21 @@ void Game::mouseClicked() {
 
 	m_mouse_x = sf::Mouse::getPosition(window).x / m_mouse_width;
 	m_mouse_y = sf::Mouse::getPosition(window).y / m_mouse_height;
-	
-	//select cell
-	if (!cellSelected) {
 
+	//select cell
+	if (!cellSelected && ((whiteTurn && (board[m_mouse_x][m_mouse_y] > 0)) || (!whiteTurn && !(board[m_mouse_x][m_mouse_y] > 0)))) {
+		
 		selectedX = m_mouse_x;
 		selectedY = m_mouse_y;
+
 		calcLegalMoves();
 		if(board[selectedX][selectedY] != 0){  //cant select empty cells
-			std::cout << static_cast<char>(selectedX + 65) << abs(selectedY - 8) << " selected\n";
+			if(whiteTurn && board[selectedX][selectedY] > 0)
+			cellSelected = true;	
+			if(!whiteTurn && board[selectedX][selectedY] < 0)
 			cellSelected = true;
 		}
-
-	} else {
+	}	else {
 		if(legalMoves[m_mouse_x][m_mouse_y]) {	//if legal move move
 			std::cout << static_cast<char>(selectedX + 65) << abs(selectedY - 8) <<
 				" moved to: " << static_cast<char>(m_mouse_x + 65) <<
@@ -135,18 +143,25 @@ void Game::mouseClicked() {
 
 			board[m_mouse_x][m_mouse_y] = board[selectedX][selectedY];
 			board[selectedX][selectedY] = E_Piece::empty;
+			
+			if (whiteTurn) { // swtich turns after move
+				whiteTurn = false;
+			} else{
+				whiteTurn = true;
+			}
 
 			cellSelected = false;
 			clearLegalMoves();
-		}	//if i click on already selected de-select 
+		}	//click on already selected de-select 
 		else if (m_mouse_x == selectedX && m_mouse_y == selectedY) {
 			cellSelected = false;
 			clearLegalMoves();
-		} //if i click on another on my team swap selected 
-		else if (board[m_mouse_x][m_mouse_y] * board[selectedX][selectedY] >= 0) {
+		} //click on other team piece swap selected 
+		else if (board[m_mouse_x][m_mouse_y] * board[selectedX][selectedY] > 0) {
 			cellSelected = false;
 			mouseClicked();	// select the other piece
-		}	
+			return;
+		}
 	}
 	render();	// render to always display moves
 }
@@ -164,9 +179,12 @@ void Game::clearLegalMoves() {
 void Game::KeyPress() {
 	auto keycode = ev.key.code;
 	if (keycode == sf::Keyboard::Escape) {	//close on escape
-		window.close();
+		stop();
 	}
-	//maybe add more
+	if (keycode == sf::Keyboard::R){
+		std::cout << "restart not made yet :P\n";
+	}
+		//maybe add more
 }
 
 void Game::KeyRelease() {
@@ -235,8 +253,8 @@ void Game::render() {
 	window.display();
 }
 
-void Game::calcLegalMoves() {	//this function sucks... but it works so fuck you
-	//like its really bad
+//this function sucks... but it works so fuck you
+void Game::calcLegalMoves() {	//like its really bad
 	clearLegalMoves();
 	switch (board[selectedX][selectedY]) {
 	case empty:	//if its empty fuck off pwease :3
@@ -400,10 +418,32 @@ void Game::calcLegalMoves() {	//this function sucks... but it works so fuck you
 			if (board[selectedX + 2][selectedY - 1] <= 0 && selectedY - 1 >= 0)
 				legalMoves[selectedX + 2][selectedY - 1] = true;
 		}
-
 		break;
 	case bknight:
-
+		if (selectedX - 1 >= 0) {	// x - 1 in x calc y-2 & +2
+			if (board[selectedX - 1][selectedY + 2] >= 0 && selectedY + 2 <= 7)
+				legalMoves[selectedX - 1][selectedY + 2] = true;
+			if (board[selectedX - 1][selectedY - 2] >= 0 && selectedY - 2 >= 0)
+				legalMoves[selectedX - 1][selectedY - 2] = true;
+		}
+		if (selectedX - 2 >= 0) {	// x - 2 in x calc y-2 & +2
+			if (board[selectedX - 2][selectedY + 1] >= 0 && selectedY + 1 <= 7)
+				legalMoves[selectedX - 2][selectedY + 1] = true;
+			if (board[selectedX - 2][selectedY - 1] >= 0 && selectedY - 1 >= 0)
+				legalMoves[selectedX - 2][selectedY - 1] = true;
+		}
+		if (selectedX + 1 <= 7) { // x + 1 in x calc y-2 & +2
+			if (board[selectedX + 1][selectedY + 2] >= 0 && selectedY + 2 <= 7)
+				legalMoves[selectedX + 1][selectedY + 2] = true;
+			if (board[selectedX + 1][selectedY - 2] >= 0 && selectedY - 2 >= 0)
+				legalMoves[selectedX + 1][selectedY - 2] = true;
+		}
+		if (selectedX + 2 <= 7) { // x + 2 in x calc y-2 & +2
+			if (board[selectedX + 2][selectedY + 1] >= 0 && selectedY + 1 <= 7)
+				legalMoves[selectedX + 2][selectedY + 1] = true;
+			if (board[selectedX + 2][selectedY - 1] >= 0 && selectedY - 1 >= 0)
+				legalMoves[selectedX + 2][selectedY - 1] = true;
+		}
 		break;
 	case rook:
 		for (int i = 1; i < 8; i++) {	//up
@@ -703,8 +743,51 @@ void Game::calcLegalMoves() {	//this function sucks... but it works so fuck you
 		}
 		break;
 	case king:
+		if(selectedX + 1 <= 7){	//x+1 right 3 moves
+			if(board[selectedX + 1][selectedY] <= 0)
+				legalMoves[selectedX + 1][selectedY] = true;	//rigt
+			if(selectedY + 1 <= 7 && board[selectedX + 1][selectedY+1] <= 0)
+				legalMoves[selectedX+1][selectedY+1] = true;	//right down
+			if(selectedY - 1 >= 0 && board[selectedX + 1][selectedY - 1] <= 0)
+				legalMoves[selectedX+1][selectedY-1] = true;	//right up
+		}
+		if(selectedX -1 >= 0){ //x-1 left 3 moves
+			if (board[selectedX - 1][selectedY] <= 0)
+				legalMoves[selectedX - 1][selectedY] = true;	//left
+			if (selectedY - 1 >= 0 && board[selectedX - 1][selectedY - 1] <= 0)
+				legalMoves[selectedX-1][selectedY-1] = true;	//left up
+			if (selectedY + 1 <= 7 && board[selectedX - 1][selectedY + 1] <= 0)
+				legalMoves[selectedX-1][selectedY+1] = true;	//left down
+		}
+		// x+0
+		if (selectedY + 1 <= 7 && board[selectedX][selectedY + 1] <= 0)
+			legalMoves[selectedX][selectedY+1] = true;	//up
+		if(selectedY - 1 >= 0 && board[selectedX][selectedY - 1] <= 0)
+			legalMoves[selectedX][selectedY-1] = true;	//down
 		break;
 	case bking:
+		if (selectedX + 1 <= 7) {	//x+1 right 3 moves
+			if (board[selectedX + 1][selectedY] >= 0)
+				legalMoves[selectedX + 1][selectedY] = true;	//rigt
+			if (selectedY + 1 <= 7 && board[selectedX + 1][selectedY + 1] >= 0)
+				legalMoves[selectedX + 1][selectedY + 1] = true;	//right down
+			if (selectedY - 1 >= 0 && board[selectedX + 1][selectedY - 1] >= 0)
+				legalMoves[selectedX + 1][selectedY - 1] = true;	//right up
+		}
+		if (selectedX - 1 >= 0) { //x-1 left 3 moves
+			if (board[selectedX - 1][selectedY] >= 0)
+				legalMoves[selectedX - 1][selectedY] = true;	//left
+			if (selectedY - 1 >= 0 && board[selectedX - 1][selectedY - 1] >= 0)
+				legalMoves[selectedX - 1][selectedY - 1] = true;	//left up
+			if (selectedY + 1 <= 7 && board[selectedX - 1][selectedY + 1] >= 0)
+				legalMoves[selectedX - 1][selectedY + 1] = true;	//left down
+		}
+		// x+0
+		if (selectedY + 1 <= 7 && board[selectedX][selectedY + 1] >= 0)
+			legalMoves[selectedX][selectedY + 1] = true;	//up
+		if (selectedY - 1 >= 0 && board[selectedX][selectedY - 1] >= 0)
+			legalMoves[selectedX][selectedY - 1] = true;	//down
 		break;
 	}
 }
+//535 lines of dog shit code... idk man

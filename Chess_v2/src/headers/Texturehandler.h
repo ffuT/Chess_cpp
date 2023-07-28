@@ -1,6 +1,5 @@
 #pragma once
-//this is bad, cus i need the textures ín the pieces,
-//but i have the texture handler in the game... pieces dont have access to the game
+//i could have made a texture array i think
 
 //sfml includes
 #include <SFML/Graphics.hpp>
