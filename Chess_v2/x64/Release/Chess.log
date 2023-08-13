@@ -1,17 +1,31 @@
-﻿  Game_.cpp
-C:\Users\Tuff\Documents\GitHub\Chess_cpp\Chess\src\headers\Game.h(32,36): warning C4244: 'initializing': conversion from 'int' to 'const float', possible loss of data
-C:\Users\Tuff\Documents\GitHub\Chess_cpp\Chess\src\headers\Game.h(33,38): warning C4244: 'initializing': conversion from 'int' to 'const float', possible loss of data
-C:\Users\Tuff\Documents\GitHub\Chess_cpp\Chess\src\Game_.cpp(29,26): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
-C:\Users\Tuff\Documents\GitHub\Chess_cpp\Chess\src\Game_.cpp(30,27): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
-C:\Users\Tuff\Documents\GitHub\Chess_cpp\Chess\src\Game_.cpp(31,30): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-C:\Users\Tuff\Documents\GitHub\Chess_cpp\Chess\src\Game_.cpp(32,30): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-C:\Users\Tuff\Documents\GitHub\Chess_cpp\Chess\src\Game_.cpp(168,85): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(531,5): warning MSB8028: The intermediate directory (x64\Release\) contains files shared from another project (Chess.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  Piece.cpp
+C:\Users\hille\Documents\GitHub\Chess_cpp\Chess_v2\src\Piece.cpp(17,37): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
+C:\Users\hille\Documents\GitHub\Chess_cpp\Chess_v2\src\Piece.cpp(17,34): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+  main.cpp
+C:\Users\hille\Documents\GitHub\Chess_cpp\Chess_v2\src\headers\Game.h(36,36): warning C4244: 'initializing': conversion from 'int' to 'const float', possible loss of data
+C:\Users\hille\Documents\GitHub\Chess_cpp\Chess_v2\src\headers\Game.h(37,38): warning C4244: 'initializing': conversion from 'int' to 'const float', possible loss of data
+  Game_.cpp
+C:\Users\hille\Documents\GitHub\Chess_cpp\Chess_v2\src\headers\Game.h(36,36): warning C4244: 'initializing': conversion from 'int' to 'const float', possible loss of data
+C:\Users\hille\Documents\GitHub\Chess_cpp\Chess_v2\src\headers\Game.h(37,38): warning C4244: 'initializing': conversion from 'int' to 'const float', possible loss of data
+C:\Users\hille\Documents\GitHub\Chess_cpp\Chess_v2\src\Game_.cpp(224,92): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\hille\Documents\GitHub\Chess_cpp\Chess_v2\src\Game_.cpp(224,75): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\hille\Documents\GitHub\Chess_cpp\Chess_v2\src\Game_.cpp(238,85): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+  Texturehandler.cpp
   Generating code
-  Previous IPDB and IOBJ mismatch, fall back to full compilation.
-  All 134 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Previous IPDB not found, fall back to full compilation.
+  All 124 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   Finished generating code
-  Chess.vcxproj -> C:\Users\Tuff\Documents\GitHub\Chess_cpp\Chess\x64\Release\Chess.exe
+  Chess.vcxproj -> C:\Users\hille\Documents\GitHub\Chess_cpp\Chess_v2\x64\Release\Chess_v2.exe

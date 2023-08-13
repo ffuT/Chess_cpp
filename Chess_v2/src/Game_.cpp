@@ -83,7 +83,7 @@ void Game::start() {
 		if (window.waitEvent(ev)) {
 			switch (ev.type) {
 			case sf::Event::Closed:
-				window.close();
+				stop();
 				break;
 			case sf::Event::MouseButtonPressed:
 				mouseClicked();
@@ -254,6 +254,8 @@ void Game::render() {
 }
 
 //this function sucks... but it works so fuck you
+//this has to change idk i cant be bothered fuck idk man.. 
+//i think alot of the code needs a full restructure
 void Game::calcLegalMoves() {	//like its really bad
 	clearLegalMoves();
 	switch (board[selectedX][selectedY]) {

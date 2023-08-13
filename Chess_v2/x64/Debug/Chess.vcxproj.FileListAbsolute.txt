@@ -1,2 +1,3 @@
 C:\Users\Tuff\Documents\GitHub\Chess_cpp\Chess\x64\Debug\Chess.exe
 C:\Users\Tuff\Documents\GitHub\Chess_cpp\Chess_v2\x64\Debug\Chess_v2.exe
+C:\Users\hille\Documents\GitHub\Chess_cpp\Chess_v2\x64\Debug\Chess_v2.exe
